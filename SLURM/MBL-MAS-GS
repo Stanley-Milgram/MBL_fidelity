@@ -1,0 +1,26 @@
+#!/bin/bash
+
+slurmSLAVE=MBL-SLA-Neel.sh
+
+for size in 20
+do
+echo "L = "$size
+
+for disorder in 1.0 1.5 2.0 2.5 3.0 3.5 4.0 4.5 5.0 5.5 6.0 
+do
+echo "Delta = " $disorder
+
+for epsilon in 0.5 0.1 0.05 0.01
+do
+echo "Epsilon = " $epsilon
+jobname=GSMBL-L$size-D$disorder-e$epsilon
+slurmscript=$jobname
+
+sed "s/SIZE/$size/g" $slurmSLAVE | sed "s/DISORDER/$disorder/g"| sed "s/EPSILON/$epsilon/g"| sed "s/MYJOBNAME/$jobname/g" > $slurmscript
+
+echo "submitting " $slurmscript
+sbatch $slurmscript
+sleep 2
+done
+done
+done
